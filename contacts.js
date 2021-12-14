@@ -17,11 +17,21 @@ const listContacts = async () => {
 }
 
 const getContactById = async (contactId) => {
-  // ...твой код
+    const contacts = await contactsPath();
+    const [contact] = contacts.filter(contact => contact.id === contactId);
+    return contact;
 }
 
 const removeContact = async (contactId) => {
-  // ...твой код
+    const contacts = await contactsPath();
+    contacts.map(contact => {
+        if (contact.id === contactId) {
+            const index = contacts.indexOf(contact);
+            contacts.splice(index, 1);
+        };
+    });
+    await fs.writeFile(path.join(__dirname, 'db', 'contacts.json'), JSON.stringify(contacts, null, 2));
+    return contacts;
 }
 
 const addContact = async (name, email, phone) => {

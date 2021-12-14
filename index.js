@@ -22,17 +22,30 @@ const invokeAction = async ({ action, id, name, email, phone }) => {
       break;
 
     case 'get':
-      // ... id
+      const contactById = await getContactById(id);
+      if (contactById) {
+        console.log(chalk.green('Contact found'));
+        console.log(contactById);
+        return;
+      }
+      console.log(chalk.red('Contact not found'));
       break;
 
       case 'add':
-        const contact = await addContact(name, email, phone)
-        console.log(chalk.green('Contact add'))
-        console.log(contact)
+      const contact = await addContact(name, email, phone);
+      console.log(chalk.green('Contact add'));
+      console.log(contact);
       break;
 
     case 'remove':
-      // ... id
+      const oldContacts = await listContacts();
+      const newContacts = await removeContact(id);
+      if (oldContacts.length !== newContacts.length) {
+        console.log(chalk.green('Contact delete'));
+        console.table(newContacts);
+        return;
+      }
+      console.log(chalk.red('Contact not found'));
       break;
 
     default:
